@@ -1,28 +1,38 @@
-import React, { useEffect } from "react";
-import "./App.css";
-import axios from "axios";
+import React from "react";
+import { makeStyles } from "@material-ui/core";
+import Box from "@material-ui/core/Box";
+import UploadIcon from "@material-ui/icons/Backup";
+import Typography from "@material-ui/core/Typography";
+import FileUpload from "./components/FileUpload";
 
-function App() {
-  const test = async () => {
-    try {
-      const { data } = await axios.get("/upload");
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  title: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  icon: {
+    fontSize: theme.spacing(8),
+    marginRight: theme.spacing(1),
+  },
+}));
 
-  useEffect(() => {
-    test();
-  }, []);
+const App = () => {
+  const classes = useStyles();
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src="/uploads/senna.jpg" className="App-logo" alt="logo" />
-      </header>
-    </div>
+    <Box className={classes.root}>
+      <Box className={classes.title}>
+        <UploadIcon color="primary" className={classes.icon} />
+        <Typography variant="h2">Ract file uploader</Typography>
+      </Box>
+      <FileUpload />
+    </Box>
   );
-}
+};
 
 export default App;

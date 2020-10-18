@@ -14,14 +14,14 @@ app.post("/upload", (req, res) => {
   }
 
   // file properties
-  const { name: fileName, mimetype, mv } = req.files.file;
-  const filePath = `${__dirname}/uploads/${fileName}`;
+  const { name: fileName, mimetype, size, mv } = req.files.file;
+  const filePath = `/uploads/${fileName}`;
   // move file to upload path
-  mv(filePath, error => {
+  mv(`${__dirname}${filePath}`, error => {
     if (error) {
       return res.status(500).json({ error });
     }
-    res.status(200).json({ fileName, filePath, mimetype });
+    res.status(200).json({ fileName, filePath, mimetype, size });
   });
 });
 
