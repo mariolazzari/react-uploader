@@ -1,6 +1,5 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
-const path = require("path");
 
 const app = express();
 app.use(fileUpload());
@@ -10,25 +9,22 @@ app.get("/upload", (req, res) => {
 });
 
 app.post("/upload", (req, res) => {
-  if (!req.files) {
+  if (!req.files || !req.files.file) {
     return res.status(400).json({ message: "No file attached." });
   }
 
-  const file = req.files.file;
-  const fileName = file.name;
-
-  console.log(file);
-
-  file.mv(`${__dirname}/uploads/${fileName}`, error => {
+  // file properties
+  const { name: fileName, mimetype, mv } = req.files.file;
+  const filePath = `${__dirname}/uploads/${fileName}`;
+  // move file to upload path
+  mv(filePath, error => {
     if (error) {
-      console.error(error);
       return res.status(500).json({ error });
     }
-
-    res.status(200).json({ fileName, filePath: `/uploads/${fileName}` });
+    res.status(200).json({ fileName, filePath, mimetype });
   });
 });
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(`${__dirname}/uploads`));
 
 app.listen(5000, () => console.log("Server started"));
